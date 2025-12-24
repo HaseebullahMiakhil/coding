@@ -1,47 +1,58 @@
 import bpy
+import math
 
 # Clear existing mesh objects
 bpy.ops.object.select_all(action='DESELECT')
 bpy.ops.object.select_by_type(type='MESH')
 bpy.ops.object.delete()
 
-# Create car body
-bpy.ops.mesh.primitive_cube_add(size=2, location=(0, 0, 0.5))
-car_body = bpy.context.object
-car_body.name = "CarBody"
-bpy.ops.transform.resize(value=(1, 0.5, 0.5))  # Adjust dimensions
+# Parameters for the spiral tower
+segments = 50  # Number of segments
+height = 5.0   # Total height of the tower
+radius = 1.0   # Radius of the base
+twist = 5      # Number of twists
 
-# Create car roof
-bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 1.2))
-car_roof = bpy.context.object
-car_roof.name = "CarRoof"
-bpy.ops.transform.resize(value=(0.5, 0.5, 0.5))  # Adjust dimensions
+# Create a new mesh and a new object
+mesh = bpy.data.meshes.new("SpiralTowerMesh")
+tower_object = bpy.data.objects.new("SpiralTower", mesh)
+bpy.context.collection.objects.link(tower_object)
 
-# Create wheels
-wheel_locations = [(1.1, 0.7, 0.2), (-1.1, 0.7, 0.2), (1.1, -0.7, 0.2), (-1.1, -0.7, 0.2)]
-wheels = []
-for loc in wheel_locations:
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.3, depth=0.2, location=loc)
-    wheel = bpy.context.object
-    wheel.name = "Wheel"
-    wheels.append(wheel)
+# Create vertices and faces for the spiral tower
+verts = []
+faces = []
 
-# Group the car body, roof, and wheels
-bpy.ops.object.select_all(action='DESELECT')
-car_body.select_set(True)
-car_roof.select_set(True)
-for wheel in wheels:
-    wheel.select_set(True)
+for i in range(segments):
+    angle = i * (2 * math.pi / twist)
+    z_value = (i / segments) * height
+    x_value = radius * math.cos(angle)
+    y_value = radius * math.sin(angle)
+    verts.append((x_value, y_value, z_value))
 
-# Join into a single object
-bpy.context.view_layer.objects.active = car_body
-bpy.ops.object.join()
-bpy.context.object.name = "Car"
+    # Create faces between segments (except the last one)
+    if i > 0:
+        face = (i - 1, i, i, i - 1)  # Create a quad
+        faces.append(face)
+
+# Define the last segment to close the tower
+verts.append(verts[0])  # Connect to the first segment to create a closed shape
+
+# Update the mesh with vertices and faces
+mesh.from_pydata(verts, [], faces)
+
+# Calculate normals
+mesh.update()
+
+# Add a simple material
+material = bpy.data.materials.new(name="ColorfulMaterial")
+material.use_nodes = True
+bsdf = material.node_tree.nodes.get("Principled BSDF")
+bsdf.inputs['Base Color'].default_value = (0.1, 0.5, 0.8, 1)  # A nice blue color
+
+# Assign the material to the tower object
+tower_object.data.materials.append(material)
 
 # Set smooth shading
 bpy.ops.object.shade_smooth()
 
-# Optional: Add a simple material
-material = bpy.data.materials.new(name="CarMaterial")
-material.diffuse_color = (0.1, 0.2, 0.8, 1)  # Blue color
-bpy.context.object.data.materials.append(material)
+# Optionally set the viewport shading to 'Rendered'
+bpy.context.space_data.shading.type = 'RENDERED'
