@@ -27,7 +27,6 @@ def check_password_strength(password: str) -> str:
     else:
         return "Weak"
 
-
 password = input("Enter your password: ")
 strength = check_password_strength(password)
 print(f"Password strength: {strength}")
