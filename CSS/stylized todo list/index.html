@@ -1,57 +1,166 @@
-<!DOCTYPE html>
-<html lang="en">
-<html>
-    <head>
-        <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Styled To-Do List</title>
-        <link rel="stylesheet" data-href="styles.css"><style class="fcc-injected-styles">
-    </head>
-    <body>
-        <div class="container">
-            <h1>My To-Do List</h1>
-            <ul class="todo-list">
-                <li>
-                    <input type="checkbox" id="task1">
-                    <label for="task1">Explore gaming keyboards</label>
-                    <ul class="sub-item">
-                        <li>
-                            <a href="#" target="_blank" class="sub-item-link">Store link</a>
-                        </li>
-                    </ul>
-                </li>
+<html><head><base href="">
+  <style class="fcc-hide-header">
+    head *, title, meta, link, script {
+      display: none !important;
+    }
+  </style>
+  <script>
+    window.__frameId = 'fcc-project-preview-frame';
+    window.onerror = function(msg) {
+      const string = msg.toLowerCase();
+      if (string.includes('script error')) {
+        msg = 'Build error, open your browser console to learn more.';
+      }
+      console.log(msg);
+      return true;
+    };
+    document.addEventListener('click', function(e) {
+      let element = e.target;
+      while(element && element.nodeName !== 'A') {
+        element = element.parentElement;
+      }
+      if (element && element.nodeName === 'A' && new URL(element.href).hash === '') {
+        e.preventDefault();
+        window.parent.window.alert(
+          i18nContent.t('misc.iframe-alert', { externalLink: element.href })
+        )
+      }
+      if (element) {
+        const href = element.getAttribute('href');
+        if (!href || href[0] !== '#' && !href.match(/^https?:\/\//)) {
+          e.preventDefault();
+        }
+        else if (href.match(/^#.+/)) {
+          e.preventDefault();
+          const scrollId = href.substring(1);
+          window.location.hash = scrollId;
+        }
+      }
+    }, false);
+    document.addEventListener('submit', function(e) {
+      const action = e.target.getAttribute('action');
+      e.preventDefault();
+      if (action && action.match(/https?:\/\//)) {
+        window.parent.window.alert(
+          i18nContent.t('misc.iframe-form-submit-alert', { externalLink: action  })
+        )
+      }
+    }, false);
+  </script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Styled To-Do List</title><link rel="stylesheet" data-href="styles.css"><style class="fcc-injected-styles">body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+}
 
-                <li>
-                    <input type="checkbox" id="task2">
-                    <label for="task2">Finish the report</label>
-                    <ul class="sub-item">
-                        <li>
-                            <a href="#" target="_blank" class="sub-item-link">Request Access</a>
-                        </li>
-                    </ul>
-                </li>
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
-                <li>
-                    <input type="checkbox" id="task3">
-                    <label for="task3">View Phone's Warranty</label>
-                    <ul class="sub-item">
-                        <li>
-                            <a href="#" target="_blank" class="sub-item-link">View Receipts</a>
-                        </li>
-                    </ul>
-                </li>
+h1 {
+  text-align: center;
+  color: #333;
+}
 
-                <li>
-                    <input type="checkbox" id="task4">
-                    <label for="task4">Check Processor Specs</label>
-                    <ul class="sub-item">
-                        <li>
-                            <a href="#" target="_blank" class="sub-item-link">View Model Number</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+.todo-list {
+  list-style-type: none;
+  padding: 0;
+}
 
-    </body>
+.todo-list li {
+  margin-bottom: 15px;
+  line-height: 1.6;
+  padding: 10px;
+  background-color: #e5f1e5;
+  border-radius: 10px;
+  position: relative;
+}
 
-</html>
+a.sub-item-link {
+  margin-left: 10px;
+  text-decoration: none;
+}
+
+.sub-item-link:link {
+  color: blue;
+}
+
+.sub-item-link:visited {
+  color: purple;
+}
+
+.sub-item-link:hover {
+  color: red;
+}
+
+.sub-item-link:focus {
+  outline: 2px solid blue;
+  outline-offset: 2px;
+}
+
+.sub-item-link:active {
+  color: green;
+}
+
+.sub-item {
+  list-style-type: square;
+}</style></head>
+    
+    
+    
+    
+  
+
+  <body>
+    <div class="container">
+      <h1>My To-Do List</h1>
+      <ul class="todo-list">
+        <li>
+          <input type="checkbox" id="task1">
+          <label for="task1">Explore gaming keyboards</label>
+          <ul class="sub-item">
+            <li>
+              <a href="#" target="_blank" class="sub-item-link">Store link</a>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <input type="checkbox" id="task2">
+          <label for="task2">Finish the report</label>
+          <ul class="sub-item">
+            <li>
+              <a href="#" target="_blank" class="sub-item-link">Request Access</a>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <input type="checkbox" id="task3">
+          <label for="task3">View Phone's Warranty</label>
+          <ul class="sub-item">
+            <li>
+              <a href="#" target="_blank" class="sub-item-link">View Receipts</a>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <input type="checkbox" id="task4">
+          <label for="task4">Check Processor Specs</label>
+          <ul class="sub-item">
+            <li>
+              <a href="#" target="_blank" class="sub-item-link">View Model Number</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+</body></html>
